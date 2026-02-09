@@ -131,6 +131,7 @@ class WellbeingApp {
 
                 if (field.type === 'select') {
                     const select = document.createElement('select');
+                    select.id = `input-${field.id}`;
                     select.className = 'glass p-3 rounded-xl border border-white/10 bg-transparent text-white outline-none';
 
                     // Force initialization if missing
@@ -153,6 +154,7 @@ class WellbeingApp {
                     container.append(label, select);
                 } else {
                     const input = document.createElement('input');
+                    input.id = `input-${field.id}`;
                     input.type = 'number';
                     input.className = 'glass p-3 rounded-xl border border-white/10 outline-none focus:border-emerald-500';
                     input.placeholder = '0';
