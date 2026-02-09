@@ -365,9 +365,7 @@ class WellbeingApp {
         this.nodes.dailyRoutine.innerHTML = this.currentRoutine.map((item, index) => `
             <div class="exercise-card flex items-center gap-4 p-4 rounded-2xl bg-black/20 border border-white/5 cursor-pointer hover:bg-emerald-900/20 transition-all" data-index="${index}">
                 <div class="w-12 h-12 rounded-xl overflow-hidden opacity-80">
-                    <img src="${item.img}" 
-                         onerror="this.src='https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200'; this.onerror=null;" 
-                         class="w-full h-full object-cover">
+                    <img src="${item.img}" class="w-full h-full object-cover">
                 </div>
                 <div class="flex-1 text-left">
                     <h4 class="font-bold text-sm">${item.name}</h4>

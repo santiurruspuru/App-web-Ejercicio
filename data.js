@@ -113,7 +113,7 @@ const appData = {
                 duration: "2 min",
                 benefits: "Salud espinal",
                 description: "En cuadrupedia, arquea suavemente la espalda mientras inhalas y redondéala al exhalar. Ideal para aliviar hernias y rigidez.",
-                img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHlxM2Z6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTNmJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxS7XvY5wzS/giphy.gif",
+                img: "https://media.giphy.com/media/3o7TKMGpxS7XvY5wzS/giphy.gif",
                 theory: "Este ejercicio moviliza todas las vértebras. Reduce la presión intradiscal y mejora la lubricación de las articulaciones de la espalda."
             },
             {
@@ -131,7 +131,7 @@ const appData = {
                 duration: "3 min",
                 benefits: "Estabilidad Lumbar",
                 description: "Eleva la pelvis manteniendo los hombros apoyados. No fuerces la altura, céntrate en activar el glúteo.",
-                img: "https://i.pinimg.com/originals/24/e1/94/24e1940a02cb804702989b537f5945da.gif",
+                img: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3N5bm9scTRoZnB1MGltMHFoYm4waTJ3cjM4dDVndDVndDVndDVudyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKMf5H3S0n9O7p6/giphy.gif",
                 theory: "Glúteos fuertes actúan como un 'escudo' para tu espalda baja, quitándole carga a las vértebras lumbares."
             },
             {
@@ -140,7 +140,7 @@ const appData = {
                 duration: "2 min",
                 benefits: "Postura & Hombros",
                 description: "De pie, apoya el antebrazo en el marco de una puerta y gira suavemente el cuerpo hacia el lado contrario.",
-                img: "https://darebee.com/images/exercises/chest-and-shoulders-stretch-exercise.jpg",
+                img: "https://darebee.com/images/exercises/doorway-stretch.jpg",
                 theory: "Compensa las horas de oficina/sentado. Un pecho abierto permite una mejor respiración y reduce la tensión cervical."
             }
         ],
