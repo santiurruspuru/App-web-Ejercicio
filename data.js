@@ -113,7 +113,7 @@ const appData = {
                 duration: "2 min",
                 benefits: "Salud espinal",
                 description: "En cuadrupedia, arquea suavemente la espalda mientras inhalas y redondéala al exhalar. Ideal para aliviar hernias y rigidez.",
-                img: "assets/guide/stretching/cat_cow.svg",
+                img: "assets/guide/stretching/cat_cow.jpg",
                 theory: "Este ejercicio moviliza todas las vértebras. Reduce la presión intradiscal y mejora la lubricación de las articulaciones de la espalda."
             },
             {
@@ -131,17 +131,17 @@ const appData = {
                 duration: "3 min",
                 benefits: "Estabilidad Lumbar",
                 description: "Eleva la pelvis manteniendo los hombros apoyados. No fuerces la altura, céntrate en activar el glúteo.",
-                img: "assets/guide/strength/glute_bridge.svg",
+                img: "assets/guide/strength/glute_bridge.jpg",
                 theory: "Glúteos fuertes actúan como un 'escudo' para tu espalda baja, quitándole carga a las vértebras lumbares."
             },
             {
                 id: "e4",
-                name: "Postura de Cobra",
+                name: "Apertura de Pecho",
                 duration: "2 min",
-                benefits: "Apertura Torácica",
-                description: "Tumbado boca abajo, eleva el pecho apoyando las manos. Mantén los hombros lejos de las orejas.",
-                img: "assets/guide/yoga/cobra_pose.svg",
-                theory: "Fortalece la espalda y abre el pecho, mejorando la capacidad pulmonar y la postura."
+                benefits: "Postura & Hombros",
+                description: "De pie, apoya el antebrazo en el marco de una puerta y gira suavemente el cuerpo hacia el lado contrario.",
+                img: "assets/guide/stretching/chest_opener.jpg",
+                theory: "Compensa las horas de oficina/sentado. Un pecho abierto permite una mejor respiración y reduce la tensión cervical."
             },
             {
                 id: "e5",
