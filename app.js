@@ -187,22 +187,31 @@ class WellbeingApp {
         this.currentRoutine = appData.routines.no_impact;
         this.nodes.userNameDisplay.innerText = "Usuario"; // Hardcoded for now, can be asked in onboarding
 
-        this.nodes.dailyRoutine.innerHTML = this.currentRoutine.map(item => `
-            <div class="flex items-center gap-4 p-4 rounded-2xl bg-indigo-500/5 border border-white/5">
+        this.nodes.dailyRoutine.innerHTML = this.currentRoutine.map((item, index) => `
+            <div class="exercise-card flex items-center gap-4 p-4 rounded-2xl bg-indigo-500/5 border border-white/5 cursor-pointer hover:bg-indigo-500/10 transition-all" data-index="${index}">
                 <div class="bg-indigo-500/20 p-3 rounded-xl text-indigo-400">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1 text-left">
                     <h4 class="font-bold text-sm text-slate-200">${item.name}</h4>
                     <p class="text-xs text-slate-500">${item.duration} • ${item.benefits}</p>
                 </div>
+                <button class="text-slate-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
             </div>
         `).join('');
+
+        // Add listeners to cards
+        this.nodes.dailyRoutine.querySelectorAll('.exercise-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const index = parseInt(card.getAttribute('data-index'));
+                this.startExecution(index);
+            });
+        });
     }
 
     // --- Exercise Execution Logic ---
-    startExecution() {
-        this.routineStep = 0;
+    startExecution(startIndex = 0) {
+        this.routineStep = startIndex;
         this.switchScreen('player');
         this.loadExercise();
     }
