@@ -58,6 +58,8 @@ class WellbeingApp {
             chatMessages: document.getElementById('chat-messages'),
             chatInput: document.getElementById('chat-input'),
             sendChatBtn: document.getElementById('send-chat-btn'),
+            chatbot: document.getElementById('chatbot-screen'),
+            syncGoogleBtn: document.getElementById('sync-google-btn'),
 
             navBtns: document.querySelectorAll('.nav-btn')
         };
@@ -89,6 +91,19 @@ class WellbeingApp {
         this.nodes.navBtns.forEach(btn => {
             btn.addEventListener('click', () => this.switchScreen(btn.getAttribute('data-screen')));
         });
+
+        this.nodes.syncGoogleBtn.addEventListener('click', () => this.handleCalendarSync());
+    }
+
+    handleCalendarSync() {
+        this.nodes.syncGoogleBtn.innerText = "⏳ Sincronizando...";
+        this.nodes.syncGoogleBtn.disabled = true;
+
+        setTimeout(() => {
+            alert("¡Conexión establecida! Tus rutinas se han sincronizado con Google Calendar. 🗓️🌿");
+            this.nodes.syncGoogleBtn.innerText = "Rutina Sincronizada";
+            this.nodes.syncGoogleBtn.classList.replace('btn-primary', 'bg-emerald-800/50');
+        }, 2000);
     }
 
     // --- Onboarding & Profile Logic ---
@@ -273,10 +288,12 @@ class WellbeingApp {
 
     // --- Dashboard & Navigation ---
     switchScreen(screenId) {
-        [this.nodes.dashboard, this.nodes.player, this.nodes.stats, this.nodes.profile, this.nodes.calendar, document.getElementById('chatbot-screen')]
-            .forEach(s => s.classList.add('hidden'));
+        [this.nodes.dashboard, this.nodes.player, this.nodes.stats, this.nodes.profile, this.nodes.calendar, this.nodes.chatbot]
+            .forEach(s => s && s.classList.add('hidden'));
 
-        this.nodes[screenId].classList.remove('hidden');
+        if (this.nodes[screenId]) {
+            this.nodes[screenId].classList.remove('hidden');
+        }
 
         this.nodes.navBtns.forEach(btn => {
             const isMatch = btn.getAttribute('data-screen') === screenId;

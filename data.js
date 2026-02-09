@@ -140,7 +140,7 @@ const appData = {
                 duration: "2 min",
                 benefits: "Postura & Hombros",
                 description: "De pie, apoya el antebrazo en el marco de una puerta y gira suavemente el cuerpo hacia el lado contrario.",
-                img: "https://images.unsplash.com/photo-1549576490-b0b4831da60a?auto=format&fit=crop&q=80&w=400",
+                img: "https://images.unsplash.com/photo-1549576490-8d54d92c300b?auto=format&fit=crop&q=80&w=400",
                 theory: "Compensa las horas de oficina/sentado. Un pecho abierto permite una mejor respiración y reduce la tensión cervical."
             }
         ],
