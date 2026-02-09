@@ -96,6 +96,7 @@ class WellbeingApp {
     }
 
     handleCalendarSync() {
+        console.log('Syncing calendar...');
         this.nodes.syncGoogleBtn.innerText = "⏳ Sincronizando...";
         this.nodes.syncGoogleBtn.disabled = true;
 
@@ -103,7 +104,7 @@ class WellbeingApp {
             alert("¡Conexión establecida! Tus rutinas se han sincronizado con Google Calendar. 🗓️🌿");
             this.nodes.syncGoogleBtn.innerText = "Rutina Sincronizada";
             this.nodes.syncGoogleBtn.classList.replace('btn-primary', 'bg-emerald-800/50');
-        }, 2000);
+        }, 1500);
     }
 
     // --- Onboarding & Profile Logic ---
@@ -288,11 +289,23 @@ class WellbeingApp {
 
     // --- Dashboard & Navigation ---
     switchScreen(screenId) {
-        [this.nodes.dashboard, this.nodes.player, this.nodes.stats, this.nodes.profile, this.nodes.calendar, this.nodes.chatbot]
-            .forEach(s => s && s.classList.add('hidden'));
+        console.log('Switching to screen:', screenId);
 
-        if (this.nodes[screenId]) {
-            this.nodes[screenId].classList.remove('hidden');
+        // Hide all screens explicitly by ID and by reference
+        [
+            this.nodes.dashboard, this.nodes.player, this.nodes.stats,
+            this.nodes.profile, this.nodes.calendar, this.nodes.chatbot,
+            document.getElementById('stats-screen'),
+            document.getElementById('chatbot-screen'),
+            document.getElementById('calendar-screen')
+        ].forEach(s => s && s.classList.add('hidden'));
+
+        // Show targets
+        const target = this.nodes[screenId] || document.getElementById(`${screenId}-screen`);
+        if (target) {
+            target.classList.remove('hidden');
+        } else {
+            console.error('Target screen not found:', screenId);
         }
 
         this.nodes.navBtns.forEach(btn => {
@@ -352,7 +365,9 @@ class WellbeingApp {
         this.nodes.dailyRoutine.innerHTML = this.currentRoutine.map((item, index) => `
             <div class="exercise-card flex items-center gap-4 p-4 rounded-2xl bg-black/20 border border-white/5 cursor-pointer hover:bg-emerald-900/20 transition-all" data-index="${index}">
                 <div class="w-12 h-12 rounded-xl overflow-hidden opacity-80">
-                    <img src="${item.img}" class="w-full h-full object-cover">
+                    <img src="${item.img}" 
+                         onerror="this.src='https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200'; this.onerror=null;" 
+                         class="w-full h-full object-cover">
                 </div>
                 <div class="flex-1 text-left">
                     <h4 class="font-bold text-sm">${item.name}</h4>
