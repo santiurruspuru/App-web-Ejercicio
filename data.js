@@ -113,7 +113,7 @@ const appData = {
                 duration: "2 min",
                 benefits: "Salud espinal",
                 description: "En cuadrupedia, arquea suavemente la espalda mientras inhalas y redondéala al exhalar. Ideal para aliviar hernias y rigidez.",
-                img: "https://media.giphy.com/media/3o7TKMGpxS7XvY5wzS/giphy.gif",
+                img: "assets/guide/stretching/cat_cow.svg",
                 theory: "Este ejercicio moviliza todas las vértebras. Reduce la presión intradiscal y mejora la lubricación de las articulaciones de la espalda."
             },
             {
@@ -122,7 +122,7 @@ const appData = {
                 duration: "3 min",
                 benefits: "Core & Sistema Nervioso",
                 description: "Tumbado boca arriba, coloca una mano en el pecho y otra en el abdomen. Inhala haciendo que solo suba la del abdomen.",
-                img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Diaphragmatic_breathing.gif",
+                img: "assets/guide/wellness/breathing.svg",
                 theory: "Activa el nervio vago, reduciendo los niveles de cortisol y fortaleciendo el transverso del abdomen sin impacto."
             },
             {
@@ -131,17 +131,44 @@ const appData = {
                 duration: "3 min",
                 benefits: "Estabilidad Lumbar",
                 description: "Eleva la pelvis manteniendo los hombros apoyados. No fuerces la altura, céntrate en activar el glúteo.",
-                img: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3N5bm9scTRoZnB1MGltMHFoYm4waTJ3cjM4dDVndDVndDVndDVudyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKMf5H3S0n9O7p6/giphy.gif",
+                img: "assets/guide/strength/glute_bridge.svg",
                 theory: "Glúteos fuertes actúan como un 'escudo' para tu espalda baja, quitándole carga a las vértebras lumbares."
             },
             {
                 id: "e4",
-                name: "Apertura de Pecho",
+                name: "Postura de Cobra",
                 duration: "2 min",
-                benefits: "Postura & Hombros",
-                description: "De pie, apoya el antebrazo en el marco de una puerta y gira suavemente el cuerpo hacia el lado contrario.",
-                img: "https://darebee.com/images/exercises/doorway-stretch.jpg",
-                theory: "Compensa las horas de oficina/sentado. Un pecho abierto permite una mejor respiración y reduce la tensión cervical."
+                benefits: "Apertura Torácica",
+                description: "Tumbado boca abajo, eleva el pecho apoyando las manos. Mantén los hombros lejos de las orejas.",
+                img: "assets/guide/yoga/cobra_pose.svg",
+                theory: "Fortalece la espalda y abre el pecho, mejorando la capacidad pulmonar y la postura."
+            },
+            {
+                id: "e5",
+                name: "Perro Boca Abajo",
+                duration: "2 min",
+                benefits: "Estiramiento Integral",
+                description: "Forma una 'V' invertida con tu cuerpo. Empuja el suelo con las manos y lleva los talones hacia abajo.",
+                img: "assets/guide/yoga/downward_dog.svg",
+                theory: "Estira toda la cadena posterior (isquios, espalda) y mejora la circulación sanguínea."
+            },
+            {
+                id: "e6",
+                name: "Postura del Árbol",
+                duration: "2 min",
+                benefits: "Equilibrio & Foco",
+                description: "Busca un punto fijo y apoya la planta de un pie en la pierna contraria (evita la rodilla). Une tus manos.",
+                img: "assets/guide/yoga/tree_pose.svg",
+                theory: "Mejora el equilibrio físico y mental, fortaleciendo tobillos y core."
+            },
+            {
+                id: "e7",
+                name: "Postura del Niño",
+                duration: "3 min",
+                benefits: "Descanso & Liberación",
+                description: "Siéntate sobre tus talones y deja caer el torso hacia adelante, apoyando la frente en el suelo.",
+                img: "assets/guide/yoga/child_pose.svg",
+                theory: "Es la postura de descanso por excelencia. Relaja profundamente la zona lumbar y el sistema nervioso."
             }
         ],
         advice: {

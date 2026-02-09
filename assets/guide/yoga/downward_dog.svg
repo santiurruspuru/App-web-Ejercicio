@@ -1,0 +1,17 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="200" cy="200" r="180" fill="#f0fdf4" />
+  
+  <g stroke="#064e3b" stroke-width="8" fill="none" stroke-linecap="round">
+    <!-- Inverted V shape -->
+    <path d="M100 320 L200 150 L300 320" stroke="#10b981" stroke-width="12" />
+    
+    <!-- Head -->
+    <circle cx="185" cy="180" r="25" fill="#d1fae5" transform="rotate(-45 185 180)" />
+    
+    <!-- Hands/Feet details -->
+    <line x1="100" y1="320" x2="80" y2="320" />
+    <line x1="300" y1="320" x2="320" y2="320" />
+  </g>
+  
+  <text x="200" y="370" font-family="Arial, sans-serif" font-size="20" fill="#064e3b" text-anchor="middle" font-weight="bold">Perro Boca Abajo</text>
+</svg>
