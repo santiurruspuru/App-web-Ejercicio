@@ -3,8 +3,10 @@ import appData from './data.js';
 class WellbeingApp {
     constructor() {
         this.currentStep = 0;
-        this.answers = {};
+        this.answers = JSON.parse(localStorage.getItem('wellbeing_answers')) || {};
+        this.profile = JSON.parse(localStorage.getItem('wellbeing_profile')) || {};
         this.filteredQuestions = [...appData.questions];
+
         this.currentRoutine = [];
         this.routineStep = 0;
         this.timer = null;
@@ -17,6 +19,7 @@ class WellbeingApp {
             dashboard: document.getElementById('dashboard-screen'),
             player: document.getElementById('player-screen'),
             stats: document.getElementById('stats-screen'),
+            profile: document.getElementById('profile-screen'),
             calendar: document.getElementById('calendar-screen'),
             nav: document.getElementById('main-nav'),
 
@@ -30,17 +33,28 @@ class WellbeingApp {
             userNameDisplay: document.getElementById('user-name-display'),
             dailyRoutine: document.getElementById('daily-routine'),
             startRoutineBtn: document.getElementById('start-routine-btn'),
+            adviceBox: document.getElementById('health-advice-box'),
+            adviceText: document.getElementById('health-advice-text'),
 
             playerStep: document.getElementById('player-step'),
             playerName: document.getElementById('player-exercise-name'),
             playerDesc: document.getElementById('player-desc'),
+            playerTheory: document.getElementById('player-theory'),
+            playerImg: document.getElementById('player-img'),
             timerText: document.getElementById('timer-text'),
             timerProgress: document.getElementById('timer-progress'),
             pauseBtn: document.getElementById('pause-timer-btn'),
             skipBtn: document.getElementById('skip-timer-btn'),
             closePlayerBtn: document.getElementById('close-player-btn'),
 
-            syncBtn: document.getElementById('sync-google-btn'),
+            profileName: document.getElementById('profile-name'),
+            profileInitial: document.getElementById('profile-initial'),
+            profileWeight: document.getElementById('prof-weight'),
+            profileHeight: document.getElementById('prof-height'),
+            profileTags: document.getElementById('profile-tags'),
+            logoutBtn: document.getElementById('logout-btn'),
+            editOnboardingBtn: document.getElementById('edit-onboarding-btn'),
+
             navBtns: document.querySelectorAll('.nav-btn')
         };
 
@@ -48,30 +62,35 @@ class WellbeingApp {
     }
 
     init() {
-        this.renderQuestion();
+        // If profile exists, skip onboarding
+        if (this.profile.name) {
+            this.showDashboard();
+        } else {
+            this.renderQuestion();
+        }
+
         this.nodes.nextBtn.addEventListener('click', () => this.handleNext());
         this.nodes.prevBtn.addEventListener('click', () => this.handlePrev());
         this.nodes.startRoutineBtn.addEventListener('click', () => this.startExecution());
         this.nodes.pauseBtn.addEventListener('click', () => this.togglePause());
         this.nodes.skipBtn.addEventListener('click', () => this.nextExercise());
         this.nodes.closePlayerBtn.addEventListener('click', () => this.stopExecution());
-        this.nodes.syncBtn.addEventListener('click', () => this.syncCalendar());
+        this.nodes.logoutBtn.addEventListener('click', () => this.logout());
+        this.nodes.editOnboardingBtn.addEventListener('click', () => this.restartOnboarding());
 
         this.nodes.navBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const screen = btn.getAttribute('data-screen');
-                this.switchScreen(screen);
-            });
+            btn.addEventListener('click', () => this.switchScreen(btn.getAttribute('data-screen')));
         });
     }
 
-    // --- Onboarding Logic ---
+    // --- Onboarding & Profile Logic ---
     renderQuestion() {
+        this.updateFilters();
         const question = this.filteredQuestions[this.currentStep];
         if (!question) return;
 
         this.nodes.questionText.innerText = question.text;
-        this.nodes.stepIndicator.innerText = `Pregunta ${this.currentStep + 1} de ${this.filteredQuestions.length}`;
+        this.nodes.stepIndicator.innerText = `Paso ${this.currentStep + 1} de ${this.filteredQuestions.length}`;
         this.nodes.progressBar.style.width = `${((this.currentStep + 1) / this.filteredQuestions.length) * 100}%`;
 
         this.nodes.optionsList.innerHTML = '';
@@ -84,13 +103,48 @@ class WellbeingApp {
                 card.onclick = () => this.handleOptionSelect(question, opt, card);
                 this.nodes.optionsList.appendChild(card);
             });
-        } else if (question.type === 'number') {
+        } else if (question.type === 'text' || question.type === 'number') {
             const input = document.createElement('input');
-            input.type = 'number';
-            input.className = 'w-full glass p-4 rounded-2xl text-center text-2xl bg-transparent outline-none';
+            input.type = question.type;
+            input.className = 'w-full glass p-4 rounded-2xl text-lg outline-none border border-white/10 focus:border-emerald-500';
+            input.placeholder = 'Escribe aquí...';
             input.value = this.answers[question.id] || '';
             input.oninput = (e) => this.answers[question.id] = e.target.value;
             this.nodes.optionsList.appendChild(input);
+        } else if (question.type === 'profile_grid') {
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-2 gap-4';
+            question.fields.forEach(field => {
+                const container = document.createElement('div');
+                container.className = 'flex flex-col gap-2';
+                const label = document.createElement('label');
+                label.className = 'text-xs text-emerald-300 opacity-60 ml-2';
+                label.innerText = field.label;
+
+                if (field.type === 'select') {
+                    const select = document.createElement('select');
+                    select.className = 'glass p-3 rounded-xl border border-white/10 bg-transparent text-white outline-none';
+                    field.options.forEach(opt => {
+                        const o = document.createElement('option');
+                        o.value = opt;
+                        o.innerText = opt;
+                        o.className = 'bg-[#061d15]';
+                        select.appendChild(o);
+                    });
+                    select.value = this.answers[field.id] || field.options[0];
+                    select.onchange = (e) => this.answers[field.id] = e.target.value;
+                    container.append(label, select);
+                } else {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.className = 'glass p-3 rounded-xl border border-white/10 outline-none focus:border-emerald-500';
+                    input.value = this.answers[field.id] || '';
+                    input.oninput = (e) => this.answers[field.id] = e.target.value;
+                    container.append(label, input);
+                }
+                grid.appendChild(container);
+            });
+            this.nodes.optionsList.appendChild(grid);
         }
 
         this.nodes.prevBtn.classList.toggle('hidden', this.currentStep === 0);
@@ -100,7 +154,7 @@ class WellbeingApp {
     handleOptionSelect(question, option, card) {
         if (question.type === 'select') {
             this.answers[question.id] = option;
-            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            this.nodes.optionsList.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
         } else {
             if (!this.answers[question.id]) this.answers[question.id] = [];
@@ -122,14 +176,17 @@ class WellbeingApp {
     }
 
     handleNext() {
-        if (!this.answers[this.filteredQuestions[this.currentStep].id]) {
-            alert('Por favor, responde antes de continuar.');
-            return;
+        const q = this.filteredQuestions[this.currentStep];
+        // Validation for required fields
+        if (q.type === 'profile_grid') {
+            const allFilled = q.fields.every(f => this.answers[f.id]);
+            if (!allFilled) { alert('Completa todos los campos del perfil.'); return; }
+        } else if (!this.answers[q.id] || (Array.isArray(this.answers[q.id]) && this.answers[q.id].length === 0)) {
+            alert('Por favor, responde antes de continuar.'); return;
         }
 
         if (this.currentStep < this.filteredQuestions.length - 1) {
             this.currentStep++;
-            this.updateFilters();
             this.renderQuestion();
         } else {
             this.finishOnboarding();
@@ -146,70 +203,112 @@ class WellbeingApp {
     updateFilters() {
         this.filteredQuestions = appData.questions.filter(q => {
             if (!q.condition) return true;
-            const conditionKey = Object.keys(q.condition)[0];
-            const conditionValue = q.condition[conditionKey];
-            return this.answers[conditionKey] === conditionValue;
+            const targetId = Object.keys(q.condition)[0];
+            const targetVal = q.condition[targetId];
+            return this.answers[targetId] === targetVal;
         });
     }
 
     finishOnboarding() {
+        this.profile = {
+            name: this.answers.u_name,
+            age: this.answers.u_age,
+            weight: this.answers.u_weight,
+            height: this.answers.u_height,
+            sex: this.answers.u_sex
+        };
+        localStorage.setItem('wellbeing_profile', JSON.stringify(this.profile));
+        localStorage.setItem('wellbeing_answers', JSON.stringify(this.answers));
+
         this.nodes.onboarding.classList.add('hidden');
         this.nodes.loading.classList.remove('hidden');
 
-        setTimeout(() => {
-            this.generatePlan();
-            this.nodes.loading.classList.add('hidden');
-            this.switchScreen('dashboard');
-            this.nodes.nav.classList.remove('hidden');
-            this.initStats();
-        }, 1500);
+        setTimeout(() => this.showDashboard(), 2000);
+    }
+
+    showDashboard() {
+        this.nodes.onboarding.classList.add('hidden');
+        this.nodes.loading.classList.add('hidden');
+        this.nodes.dashboard.classList.remove('hidden');
+        this.nodes.nav.classList.remove('hidden');
+        this.renderDashboard();
+        this.renderProfile();
     }
 
     // --- Dashboard & Navigation ---
     switchScreen(screenId) {
-        [this.nodes.dashboard, this.nodes.player, this.nodes.stats, this.nodes.calendar].forEach(s => s.classList.add('hidden'));
+        [this.nodes.dashboard, this.nodes.player, this.nodes.stats, this.nodes.profile, this.nodes.calendar]
+            .forEach(s => s.classList.add('hidden'));
+
         this.nodes[screenId].classList.remove('hidden');
 
-        // Update nav icons
         this.nodes.navBtns.forEach(btn => {
-            if (btn.getAttribute('data-screen') === screenId) {
-                btn.classList.replace('text-slate-400', 'text-indigo-400');
-            } else {
-                btn.classList.replace('text-indigo-400', 'text-slate-400');
-            }
+            const isMatch = btn.getAttribute('data-screen') === screenId;
+            btn.classList.toggle('text-emerald-400', isMatch);
+            btn.classList.toggle('text-emerald-100/30', !isMatch);
         });
 
         if (screenId === 'player') this.nodes.nav.classList.add('hidden');
         else this.nodes.nav.classList.remove('hidden');
+
+        if (screenId === 'stats') this.initStats();
     }
 
-    generatePlan() {
+    renderDashboard() {
+        this.nodes.userNameDisplay.innerText = this.profile.name;
         this.currentRoutine = appData.routines.no_impact;
-        this.nodes.userNameDisplay.innerText = "Usuario"; // Hardcoded for now, can be asked in onboarding
 
         this.nodes.dailyRoutine.innerHTML = this.currentRoutine.map((item, index) => `
-            <div class="exercise-card flex items-center gap-4 p-4 rounded-2xl bg-indigo-500/5 border border-white/5 cursor-pointer hover:bg-indigo-500/10 transition-all" data-index="${index}">
-                <div class="bg-indigo-500/20 p-3 rounded-xl text-indigo-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <div class="exercise-card flex items-center gap-4 p-4 rounded-2xl bg-black/20 border border-white/5 cursor-pointer hover:bg-emerald-900/20 transition-all" data-index="${index}">
+                <div class="w-12 h-12 rounded-xl overflow-hidden opacity-80">
+                    <img src="${item.img}" class="w-full h-full object-cover">
                 </div>
                 <div class="flex-1 text-left">
-                    <h4 class="font-bold text-sm text-slate-200">${item.name}</h4>
-                    <p class="text-xs text-slate-500">${item.duration} • ${item.benefits}</p>
+                    <h4 class="font-bold text-sm">${item.name}</h4>
+                    <p class="text-[10px] text-emerald-300/50">${item.duration} • ${item.benefits}</p>
                 </div>
-                <button class="text-slate-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
+                <div class="text-emerald-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></div>
             </div>
         `).join('');
 
-        // Add listeners to cards
         this.nodes.dailyRoutine.querySelectorAll('.exercise-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const index = parseInt(card.getAttribute('data-index'));
-                this.startExecution(index);
-            });
+            card.onclick = () => this.startExecution(parseInt(card.dataset.index));
         });
+
+        // Health Advice
+        const substances = this.answers.q_substances || [];
+        let adviceHtml = '';
+        if (substances.includes('Marihuana')) adviceHtml += `<p class="mb-2">🌿 ${appData.routines.advice.substances.marihuana}</p>`;
+        if (substances.includes('Alcohol')) adviceHtml += `<p class="mb-2">🍷 ${appData.routines.advice.substances.alcohol}</p>`;
+        if (this.answers.q_meds === 'Sí') adviceHtml += `<p>💊 ${appData.routines.advice.medication}</p>`;
+
+        if (adviceHtml) {
+            this.nodes.adviceText.innerHTML = adviceHtml;
+            this.nodes.adviceBox.classList.remove('hidden');
+        }
     }
 
-    // --- Exercise Execution Logic ---
+    renderProfile() {
+        this.nodes.profileName.innerText = this.profile.name;
+        this.nodes.profileInitial.innerText = this.profile.name[0].toUpperCase();
+        this.nodes.profileWeight.innerText = `${this.profile.weight} kg`;
+        this.nodes.profileHeight.innerText = `${this.profile.height} cm`;
+
+        const tags = [
+            `Objetivo: ${this.answers.q1}`,
+            this.answers.q2 === 'Sí' ? 'Con Lesiones' : 'Sin Lesiones',
+            `Actividad: ${this.answers.q4}`
+        ];
+        if (this.answers.q_acc && !this.answers.q_acc.includes('Ninguno')) {
+            tags.push(`Equipo: ${this.answers.q_acc.join(', ')}`);
+        }
+
+        this.nodes.profileTags.innerHTML = tags.map(t => `
+            <span class="px-3 py-1 glass rounded-full opacity-60">${t}</span>
+        `).join('');
+    }
+
+    // --- Exercise Execution ---
     startExecution(startIndex = 0) {
         this.routineStep = startIndex;
         this.switchScreen('player');
@@ -217,18 +316,16 @@ class WellbeingApp {
     }
 
     loadExercise() {
-        const exercise = this.currentRoutine[this.routineStep];
-        if (!exercise) {
-            this.finishRoutine();
-            return;
-        }
+        const item = this.currentRoutine[this.routineStep];
+        if (!item) { this.finishRoutine(); return; }
 
         this.nodes.playerStep.innerText = `Paso ${this.routineStep + 1} de ${this.currentRoutine.length}`;
-        this.nodes.playerName.innerText = exercise.name;
-        this.nodes.playerDesc.innerText = exercise.description;
+        this.nodes.playerName.innerText = item.name;
+        this.nodes.playerDesc.innerText = item.description;
+        this.nodes.playerTheory.innerText = item.theory;
+        this.nodes.playerImg.src = item.img;
 
-        // Duration to seconds (assuming "X min")
-        this.timeLeft = parseInt(exercise.duration) * 60;
+        this.timeLeft = parseInt(item.duration) * 60;
         this.maxTime = this.timeLeft;
         this.updateTimerDisplay();
         this.startTimer();
@@ -238,14 +335,11 @@ class WellbeingApp {
         if (this.timer) clearInterval(this.timer);
         this.isPaused = false;
         this.nodes.pauseBtn.innerHTML = `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-
         this.timer = setInterval(() => {
             if (!this.isPaused) {
                 this.timeLeft--;
                 this.updateTimerDisplay();
-                if (this.timeLeft <= 0) {
-                    this.nextExercise();
-                }
+                if (this.timeLeft <= 0) this.nextExercise();
             }
         }, 1000);
     }
@@ -254,10 +348,7 @@ class WellbeingApp {
         const mins = Math.floor(this.timeLeft / 60);
         const secs = this.timeLeft % 60;
         this.nodes.timerText.innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
-
-        // Progress circle
-        const dash = 754; // 2 * PI * 120
-        const offset = dash - (this.timeLeft / this.maxTime) * dash;
+        const offset = 125.6 - (this.timeLeft / this.maxTime) * 125.6;
         this.nodes.timerProgress.style.strokeDashoffset = offset;
     }
 
@@ -270,11 +361,7 @@ class WellbeingApp {
 
     nextExercise() {
         this.routineStep++;
-        if (this.routineStep < this.currentRoutine.length) {
-            this.loadExercise();
-        } else {
-            this.finishRoutine();
-        }
+        this.loadExercise();
     }
 
     stopExecution() {
@@ -284,46 +371,45 @@ class WellbeingApp {
 
     finishRoutine() {
         clearInterval(this.timer);
-        alert('¡Excelente trabajo! Rutina completada 🎉');
+        alert('¡Increíble! Has honrado tu cuerpo hoy. 🌿');
         this.switchScreen('dashboard');
     }
 
-    // --- Extras ---
+    // --- System ---
+    logout() {
+        if (confirm('¿Cerrar sesión? Se borrarán tus datos locales.')) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
+    restartOnboarding() {
+        this.currentStep = 0;
+        this.switchScreen('onboarding');
+        this.renderQuestion();
+    }
+
     initStats() {
         const ctx = document.getElementById('stats-chart').getContext('2d');
-        new Chart(ctx, {
+        if (this.chart) this.chart.destroy();
+        this.chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'],
+                labels: ['L', 'M', 'X', 'J', 'V', 'S', 'D'],
                 datasets: [{
-                    label: 'Minutos de Bienestar',
-                    data: [15, 0, 15, 10, 20, 0, 15],
-                    borderColor: '#818cf8',
-                    tension: 0.4,
+                    data: [10, 15, 8, 20, 15, 0, 0],
+                    borderColor: '#74c69d',
+                    backgroundColor: 'rgba(116, 198, 157, 0.1)',
                     fill: true,
-                    backgroundColor: 'rgba(129, 140, 248, 0.1)'
+                    tension: 0.4
                 }]
             },
             options: {
-                responsive: true,
                 plugins: { legend: { display: false } },
-                scales: {
-                    y: { display: false },
-                    x: { grid: { display: false }, ticks: { color: '#64748b' } }
-                }
+                scales: { x: { grid: { display: false }, ticks: { color: '#74c69d50' } }, y: { display: false } }
             }
         });
     }
-
-    syncCalendar() {
-        this.nodes.syncBtn.innerText = "Conectando...";
-        setTimeout(() => {
-            this.nodes.syncBtn.innerText = "¡Sincronizado!";
-            alert('Se han creado eventos para Lunes, Miércoles y Viernes a las 09:00 AM.');
-        }, 2000);
-    }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    new WellbeingApp();
-});
+document.addEventListener('DOMContentLoaded', () => new WellbeingApp());

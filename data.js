@@ -1,6 +1,24 @@
 const appData = {
     questions: [
         {
+            id: "u_name",
+            text: "¿Cúal es tu nombre?",
+            type: "text",
+            category: "perfil"
+        },
+        {
+            id: "u_basic",
+            text: "Cuéntanos sobre ti",
+            type: "profile_grid",
+            fields: [
+                { id: "u_age", label: "Edad", type: "number" },
+                { id: "u_sex", label: "Sexo", type: "select", options: ["Masculino", "Femenino", "Otro"] },
+                { id: "u_weight", label: "Peso (kg)", type: "number" },
+                { id: "u_height", label: "Altura (cm)", type: "number" }
+            ],
+            category: "perfil"
+        },
+        {
             id: "q1",
             text: "¿Cuál es tu objetivo principal?",
             type: "select",
@@ -23,6 +41,34 @@ const appData = {
             category: "salud"
         },
         {
+            id: "q_meds",
+            text: "¿Tomas alguna medicación actualmente?",
+            type: "select",
+            options: ["Sí", "No"],
+            category: "salud"
+        },
+        {
+            id: "q_meds_detail",
+            text: "¿Para qué es la medicación? (Ej: hipertensión, asma...)",
+            type: "text",
+            condition: { q_meds: "Sí" },
+            category: "salud"
+        },
+        {
+            id: "q_substances",
+            text: "¿Consumes habitualmente alguna de estas sustancias?",
+            type: "multiselect",
+            options: ["Tabaco", "Alcohol", "Marihuana", "Otras", "Ninguna"],
+            category: "salud"
+        },
+        {
+            id: "q_acc",
+            text: "¿De qué accesorios dispones en casa?",
+            type: "multiselect",
+            options: ["Mancuernas", "Bandas elásticas", "Esterilla", "Fitball", "Ninguno"],
+            category: "hábitos"
+        },
+        {
             id: "q4",
             text: "¿Cómo calificarías tu nivel de actividad física actual?",
             type: "select",
@@ -38,47 +84,11 @@ const appData = {
             category: "hábitos"
         },
         {
-            id: "q6",
-            text: "¿Te despiertas cansado a menudo?",
-            type: "select",
-            options: ["Siempre", "A veces", "Nunca"],
-            category: "hábitos"
-        },
-        {
             id: "q7",
             text: "¿Trabajas sentado más de 6 horas al día?",
             type: "select",
             options: ["Sí", "No"],
             category: "trabajo"
-        },
-        {
-            id: "q8",
-            text: "¿Sientes tensión en hombros o cuello después del trabajo?",
-            type: "select",
-            options: ["Sí", "No"],
-            category: "trabajo"
-        },
-        {
-            id: "q9",
-            text: "¿Cuántos vasos de agua bebes al día?",
-            type: "number",
-            min: 0,
-            max: 20,
-            category: "hábitos"
-        },
-        {
-            id: "q10",
-            text: "¿Consumes alimentos procesados frecuentemente?",
-            type: "select",
-            options: ["Diario", "3-4 veces/semana", "Rara vez"],
-            category: "salud"
-        },
-        {
-            id: "q11",
-            text: "¿Fumas o consumes alcohol regularmente?",
-            type: "select",
-            options: ["Ambos", "Solo tabaco", "Solo alcohol", "Ninguno"],
-            category: "salud"
         },
         {
             id: "q12",
@@ -88,58 +98,8 @@ const appData = {
             category: "trabajo"
         },
         {
-            id: "q13",
-            text: "¿Te gustaría incorporar meditación en tu rutina?",
-            type: "select",
-            options: ["Sí", "No"],
-            category: "objetivos"
-        },
-        {
-            id: "q14",
-            text: "¿Tienes poco tiempo para cocinar?",
-            type: "select",
-            options: ["Sí", "No"],
-            category: "hábitos"
-        },
-        {
-            id: "q15",
-            text: "¿Prefieres ejercicios en la mañana o tarde?",
-            type: "select",
-            options: ["Mañana", "Tarde/Noche"],
-            category: "hábitos"
-        },
-        {
-            id: "q16",
-            text: "¿Tienes acceso a un gimnasio o prefieres casa?",
-            type: "select",
-            options: ["Gimnasio", "Casa"],
-            category: "hábitos"
-        },
-        {
-            id: "q17",
-            text: "¿Te interesa el acompañamiento terapéutico/psicológico?",
-            type: "select",
-            options: ["Sí", "No"],
-            category: "objetivos"
-        },
-        {
-            id: "q18",
-            text: "¿Has consultado a un especialista por tus dolores?",
-            type: "select",
-            condition: { q2: "Sí" },
-            options: ["Sí", "No"],
-            category: "salud"
-        },
-        {
-            id: "q19",
-            text: "¿Cuál es tu mayor obstáculo para mantener hábitos saludables?",
-            type: "select",
-            options: ["Falta de tiempo", "Falta de motivación", "Dolor físico", "Estrés"],
-            category: "objetivos"
-        },
-        {
             id: "q20",
-            text: "¿Estás listo para comprometerte 15 min al día?",
+            text: "¿Estás listo para comprometerte con tu bienestar?",
             type: "select",
             options: ["Sí", "¡Totalmente!"],
             category: "objetivos"
@@ -147,24 +107,56 @@ const appData = {
     ],
     routines: {
         no_impact: [
-            { id: "e1", name: "Movilidad de Gato-Camello", duration: "2 min", benefits: "Espalda baja", description: "En cuadrupedia, arquea y redondea la espalda suavemente." },
-            { id: "e2", name: "Respiración Diafragmática", duration: "3 min", benefits: "Relajación/Core", description: "Tumbado boca arriba, respira expandiendo el abdomen." },
-            { id: "e3", name: "Puente de Glúteo Suave", duration: "3 min", benefits: "Core/Glúteos", description: "Eleva la pelvis sin forzar la espalda." },
-            { id: "e4", name: "Estiramiento de Cuello", duration: "2 min", benefits: "Cervicales", description: "Movimientos laterales lentos." },
-            { id: "e5", name: "Apertura de Pecho en Puerta", duration: "3 min", benefits: "Postura", description: "Apoya brazos en marco de puerta y adelanta el pecho." }
+            {
+                id: "e1",
+                name: "Movilidad Gato-Camello",
+                duration: "2 min",
+                benefits: "Salud espinal",
+                description: "En cuadrupedia, arquea suavemente la espalda mientras inhalas y redondéala al exhalar. Ideal para aliviar hernias y rigidez.",
+                img: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400",
+                theory: "Este ejercicio moviliza todas las vértebras. Reduce la presión intradiscal y mejora la lubricación de las articulaciones de la espalda."
+            },
+            {
+                id: "e2",
+                name: "Respiración Diafragmática",
+                duration: "3 min",
+                benefits: "Core & Sistema Nervioso",
+                description: "Tumbado boca arriba, coloca una mano en el pecho y otra en el abdomen. Inhala haciendo que solo suba la del abdomen.",
+                img: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=400",
+                theory: "Activa el nervio vago, reduciendo los niveles de cortisol y fortaleciendo el transverso del abdomen sin impacto."
+            },
+            {
+                id: "e3",
+                name: "Puente de Glúteo Suave",
+                duration: "3 min",
+                benefits: "Estabilidad Lumbar",
+                description: "Eleva la pelvis manteniendo los hombros apoyados. No fuerces la altura, céntrate en activar el glúteo.",
+                img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=400",
+                theory: "Glúteos fuertes actúan como un 'escudo' para tu espalda baja, quitándole carga a las vértebras lumbares."
+            },
+            {
+                id: "e4",
+                name: "Apertura de Pecho",
+                duration: "2 min",
+                benefits: "Postura & Hombros",
+                description: "De pie, apoya el antebrazo en el marco de una puerta y gira suavemente el cuerpo hacia el lado contrario.",
+                img: "https://images.unsplash.com/photo-1549576490-b0b4831da60a?auto=format&fit=crop&q=80&w=400",
+                theory: "Compensa las horas de oficina/sentado. Un pecho abierto permite una mejor respiración y reduce la tensión cervical."
+            }
         ],
-        simple_nutrition: {
-            high_protein: ["Huevos revueltos con espinacas", "Pollo a la plancha con puré", "Yogur griego con nueces"],
-            easy_prep: ["Ensalada de legumbres de bote", "Tostada de aguacate", "Batido de frutas y avena"],
-            hydration_tip: "Bebe un vaso de agua al despertar y antes de cada comida."
-        },
-        sleep_protocol: [
-            "No pantallas 45 min antes de dormir",
-            "Temperatura de habitación fresca (18-20°C)",
-            "Cena ligera 2 horas antes",
-            "Luz tenue por la noche"
-        ],
-        therapy_guide: "Busca 5 min de silencio absoluto al día. Si sientes estrés constante, considera una sesión de consulta gratuita online."
+        advice: {
+            substances: {
+                marihuana: "El consumo de marihuana puede afectar tu ciclo de sueño profundo y coordinación. Te recomendamos evitarlo antes de entrenar y buscar momentos de conciencia plena natural.",
+                alcohol: "El alcohol deshidrata y dificulta la recuperación muscular. Intenta limitar su consumo a eventos sociales puntuales.",
+                general: "El enfoque de esta app es el bienestar integral. Si sientes que el consumo de sustancias es un obstáculo, consulta con un profesional."
+            },
+            medication: "Recuerda siempre seguir las indicaciones de tu médico sobre el ejercicio. Estas rutinas son de bajo impacto, pero tu salud es lo primero.",
+            habits: [
+                "Intenta caminar 10 min después de cada comida.",
+                "Mantén una planta cerca de tu lugar de trabajo para mejorar el aire.",
+                "Higiene digital: apaga pantallas 1 hora antes de dormir."
+            ]
+        }
     }
 };
 
