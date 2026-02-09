@@ -133,8 +133,8 @@ class WellbeingApp {
                     const select = document.createElement('select');
                     select.className = 'glass p-3 rounded-xl border border-white/10 bg-transparent text-white outline-none';
 
-                    // Initialize default value if none exists
-                    if (!this.answers[field.id]) {
+                    // Force initialization if missing
+                    if (this.answers[field.id] === undefined || this.answers[field.id] === null) {
                         this.answers[field.id] = field.options[0];
                     }
 
@@ -145,15 +145,23 @@ class WellbeingApp {
                         o.className = 'bg-[#061d15]';
                         select.appendChild(o);
                     });
+
                     select.value = this.answers[field.id];
-                    select.onchange = (e) => this.answers[field.id] = e.target.value;
+                    const syncSelect = (e) => { this.answers[field.id] = e.target.value; };
+                    select.onchange = syncSelect;
+                    select.onblur = syncSelect;
                     container.append(label, select);
                 } else {
                     const input = document.createElement('input');
                     input.type = 'number';
                     input.className = 'glass p-3 rounded-xl border border-white/10 outline-none focus:border-emerald-500';
+                    input.placeholder = '0';
                     input.value = this.answers[field.id] || '';
-                    input.oninput = (e) => this.answers[field.id] = e.target.value;
+
+                    const syncInput = (e) => { this.answers[field.id] = e.target.value; };
+                    input.oninput = syncInput;
+                    input.onchange = syncInput;
+                    input.onblur = syncInput;
                     container.append(label, input);
                 }
                 grid.appendChild(container);
@@ -193,9 +201,12 @@ class WellbeingApp {
         const q = this.filteredQuestions[this.currentStep];
         // Validation for required fields
         if (q.type === 'profile_grid') {
-            const missing = q.fields.filter(f => !this.answers[f.id]);
+            const missing = q.fields.filter(f => {
+                const val = this.answers[f.id];
+                return val === undefined || val === null || val === "";
+            });
             if (missing.length > 0) {
-                alert(`Por favor, completa los siguientes campos: ${missing.map(f => f.label).join(', ')}`);
+                alert(`[v1.2] Faltan datos obligatorios: ${missing.map(f => f.label).join(', ')}`);
                 return;
             }
         } else if (!this.answers[q.id] || (Array.isArray(this.answers[q.id]) && this.answers[q.id].length === 0)) {
