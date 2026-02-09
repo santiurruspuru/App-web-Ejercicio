@@ -113,7 +113,7 @@ const appData = {
                 duration: "2 min",
                 benefits: "Salud espinal",
                 description: "En cuadrupedia, arquea suavemente la espalda mientras inhalas y redondéala al exhalar. Ideal para aliviar hernias y rigidez.",
-                img: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&q=80&w=400",
+                img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHlxM2Z6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTN6ZTNmJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxS7XvY5wzS/giphy.gif",
                 theory: "Este ejercicio moviliza todas las vértebras. Reduce la presión intradiscal y mejora la lubricación de las articulaciones de la espalda."
             },
             {
@@ -122,7 +122,7 @@ const appData = {
                 duration: "3 min",
                 benefits: "Core & Sistema Nervioso",
                 description: "Tumbado boca arriba, coloca una mano en el pecho y otra en el abdomen. Inhala haciendo que solo suba la del abdomen.",
-                img: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=400",
+                img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Diaphragmatic_breathing.gif",
                 theory: "Activa el nervio vago, reduciendo los niveles de cortisol y fortaleciendo el transverso del abdomen sin impacto."
             },
             {
@@ -131,7 +131,7 @@ const appData = {
                 duration: "3 min",
                 benefits: "Estabilidad Lumbar",
                 description: "Eleva la pelvis manteniendo los hombros apoyados. No fuerces la altura, céntrate en activar el glúteo.",
-                img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=400",
+                img: "https://i.pinimg.com/originals/24/e1/94/24e1940a02cb804702989b537f5945da.gif",
                 theory: "Glúteos fuertes actúan como un 'escudo' para tu espalda baja, quitándole carga a las vértebras lumbares."
             },
             {
@@ -140,7 +140,7 @@ const appData = {
                 duration: "2 min",
                 benefits: "Postura & Hombros",
                 description: "De pie, apoya el antebrazo en el marco de una puerta y gira suavemente el cuerpo hacia el lado contrario.",
-                img: "https://images.unsplash.com/photo-1549576490-8d54d92c300b?auto=format&fit=crop&q=80&w=400",
+                img: "https://darebee.com/images/exercises/chest-and-shoulders-stretch-exercise.jpg",
                 theory: "Compensa las horas de oficina/sentado. Un pecho abierto permite una mejor respiración y reduce la tensión cervical."
             }
         ],
