@@ -55,6 +55,10 @@ class WellbeingApp {
             logoutBtn: document.getElementById('logout-btn'),
             editOnboardingBtn: document.getElementById('edit-onboarding-btn'),
 
+            chatMessages: document.getElementById('chat-messages'),
+            chatInput: document.getElementById('chat-input'),
+            sendChatBtn: document.getElementById('send-chat-btn'),
+
             navBtns: document.querySelectorAll('.nav-btn')
         };
 
@@ -77,6 +81,10 @@ class WellbeingApp {
         this.nodes.closePlayerBtn.addEventListener('click', () => this.stopExecution());
         this.nodes.logoutBtn.addEventListener('click', () => this.logout());
         this.nodes.editOnboardingBtn.addEventListener('click', () => this.restartOnboarding());
+        this.nodes.sendChatBtn.addEventListener('click', () => this.handleSendMessage());
+        this.nodes.chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.handleSendMessage();
+        });
 
         this.nodes.navBtns.forEach(btn => {
             btn.addEventListener('click', () => this.switchScreen(btn.getAttribute('data-screen')));
@@ -237,7 +245,7 @@ class WellbeingApp {
 
     // --- Dashboard & Navigation ---
     switchScreen(screenId) {
-        [this.nodes.dashboard, this.nodes.player, this.nodes.stats, this.nodes.profile, this.nodes.calendar]
+        [this.nodes.dashboard, this.nodes.player, this.nodes.stats, this.nodes.profile, this.nodes.calendar, document.getElementById('chatbot-screen')]
             .forEach(s => s.classList.add('hidden'));
 
         this.nodes[screenId].classList.remove('hidden');
@@ -252,6 +260,44 @@ class WellbeingApp {
         else this.nodes.nav.classList.remove('hidden');
 
         if (screenId === 'stats') this.initStats();
+        if (screenId === 'chatbot' && this.nodes.chatMessages.children.length === 0) {
+            this.renderChatMessage('bot', appData.chatbot.welcome);
+        }
+    }
+
+    // --- Chatbot Logic ---
+    handleSendMessage() {
+        const text = this.nodes.chatInput.value.trim();
+        if (!text) return;
+
+        this.renderChatMessage('user', text);
+        this.nodes.chatInput.value = '';
+
+        setTimeout(() => {
+            const response = this.getChatBotResponse(text);
+            this.renderChatMessage('bot', response);
+        }, 600);
+    }
+
+    getChatBotResponse(input) {
+        const lowerInput = input.toLowerCase();
+        for (const item of appData.chatbot.knowledge) {
+            if (item.keywords.some(k => lowerInput.includes(k))) {
+                return item.response;
+            }
+        }
+        return appData.chatbot.fallback;
+    }
+
+    renderChatMessage(type, text) {
+        const msg = document.createElement('div');
+        msg.className = `max-w-[80%] p-4 rounded-2xl text-sm animate__animated animate__fadeInUp ${type === 'user'
+                ? 'bg-emerald-500/20 text-emerald-100 self-end ml-auto border border-emerald-500/10'
+                : 'glass text-emerald-100/80 border border-white/5'
+            }`;
+        msg.innerText = text;
+        this.nodes.chatMessages.appendChild(msg);
+        this.nodes.chatMessages.scrollTop = this.nodes.chatMessages.scrollHeight;
     }
 
     renderDashboard() {

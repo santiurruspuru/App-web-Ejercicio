@@ -157,6 +157,40 @@ const appData = {
                 "Higiene digital: apaga pantallas 1 hora antes de dormir."
             ]
         }
+    },
+    chatbot: {
+        welcome: "Hola, soy tu guía de bienestar. Estoy aquí para escucharte y apoyarte, ya sea con tu plan de entrenamiento o si quieres hablar sobre consumos que te preocupan. ¿En qué puedo ayudarte hoy?",
+        knowledge: [
+            {
+                keywords: ["consumo", "problema", "adicción", "droga", "sustancia"],
+                response: "Los consumos problemáticos afectan nuestra salud y relaciones. No estás solo/a. Lo más importante es que busques un abordaje integral que incluya salud mental y física."
+            },
+            {
+                keywords: ["dejar", "cesación", "parar", "cortar"],
+                response: "Para dejar un consumo, es clave elegir un 'Día D', limpiar tu entorno de tentaciones y apoyarte en tus seres queridos. ¿Te gustaría establecer una meta hoy?"
+            },
+            {
+                keywords: ["reducir", "limitar", "metas"],
+                response: "Una buena estrategia es establecer metas realistas, registrar cuándo consumes para identificar disparadores y cambiar rutinas por actividades saludables como el ejercicio."
+            },
+            {
+                keywords: ["antojo", "impulso", "ganas", "craving"],
+                response: "Los antojos son intensos pero pasajeros. Si sientes el impulso, intenta esperar 15 minutos, respira profundo e hidrátate bien. ¡Tú puedes!"
+            },
+            {
+                keywords: ["ayuda", "teléfono", "donde", "sedronar", "141"],
+                response: "En Argentina, puedes llamar a la Línea 141 (SEDRONAR) las 24hs. Es gratuito y anónimo. También está la línea de Salud Mental: 0800-999-0091."
+            },
+            {
+                keywords: ["entrenamiento", "ejercicio", "dolor", "lesion"],
+                response: "Tu plan está diseñado para ser de bajo impacto. Si sientes dolor persistente, descansa y consulta con un profesional. El ejercicio suave ayuda a regular el ánimo."
+            },
+            {
+                keywords: ["marihuana", "porro", "faso"],
+                response: "La marihuana puede afectar tu sueño profundo y coordinación. Si buscas mejorar tu bienestar, intenta reducir su uso especialmente antes de descansar o entrenar."
+            }
+        ],
+        fallback: "Te escucho. Intenta contarme un poco más o pregúntame sobre metas, consejos de salud o recursos de ayuda."
     }
 };
 
