@@ -132,6 +132,12 @@ class WellbeingApp {
                 if (field.type === 'select') {
                     const select = document.createElement('select');
                     select.className = 'glass p-3 rounded-xl border border-white/10 bg-transparent text-white outline-none';
+
+                    // Initialize default value if none exists
+                    if (!this.answers[field.id]) {
+                        this.answers[field.id] = field.options[0];
+                    }
+
                     field.options.forEach(opt => {
                         const o = document.createElement('option');
                         o.value = opt;
@@ -139,7 +145,7 @@ class WellbeingApp {
                         o.className = 'bg-[#061d15]';
                         select.appendChild(o);
                     });
-                    select.value = this.answers[field.id] || field.options[0];
+                    select.value = this.answers[field.id];
                     select.onchange = (e) => this.answers[field.id] = e.target.value;
                     container.append(label, select);
                 } else {
@@ -187,8 +193,11 @@ class WellbeingApp {
         const q = this.filteredQuestions[this.currentStep];
         // Validation for required fields
         if (q.type === 'profile_grid') {
-            const allFilled = q.fields.every(f => this.answers[f.id]);
-            if (!allFilled) { alert('Completa todos los campos del perfil.'); return; }
+            const missing = q.fields.filter(f => !this.answers[f.id]);
+            if (missing.length > 0) {
+                alert(`Por favor, completa los siguientes campos: ${missing.map(f => f.label).join(', ')}`);
+                return;
+            }
         } else if (!this.answers[q.id] || (Array.isArray(this.answers[q.id]) && this.answers[q.id].length === 0)) {
             alert('Por favor, responde antes de continuar.'); return;
         }
@@ -292,8 +301,8 @@ class WellbeingApp {
     renderChatMessage(type, text) {
         const msg = document.createElement('div');
         msg.className = `max-w-[80%] p-4 rounded-2xl text-sm animate__animated animate__fadeInUp ${type === 'user'
-                ? 'bg-emerald-500/20 text-emerald-100 self-end ml-auto border border-emerald-500/10'
-                : 'glass text-emerald-100/80 border border-white/5'
+            ? 'bg-emerald-500/20 text-emerald-100 self-end ml-auto border border-emerald-500/10'
+            : 'glass text-emerald-100/80 border border-white/5'
             }`;
         msg.innerText = text;
         this.nodes.chatMessages.appendChild(msg);
