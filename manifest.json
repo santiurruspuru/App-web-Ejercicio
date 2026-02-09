@@ -1,0 +1,17 @@
+{
+  "name": "Bienestar Integral",
+  "short_name": "Bienestar",
+  "description": "Tu PWA de bienestar integral y planes personalizados.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2966/2966486.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
