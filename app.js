@@ -201,12 +201,18 @@ class WellbeingApp {
         const q = this.filteredQuestions[this.currentStep];
         // Validation for required fields
         if (q.type === 'profile_grid') {
+            // Direct DOM sync before validation to be safe
+            q.fields.forEach(f => {
+                const el = document.getElementById(`input-${f.id}`);
+                if (el) this.answers[f.id] = el.value;
+            });
+
             const missing = q.fields.filter(f => {
                 const val = this.answers[f.id];
                 return val === undefined || val === null || val === "";
             });
             if (missing.length > 0) {
-                alert(`[v1.2] Faltan datos obligatorios: ${missing.map(f => f.label).join(', ')}`);
+                alert(`[v1.3] Faltan datos obligatorios: ${missing.map(f => f.label).join(', ')}`);
                 return;
             }
         } else if (!this.answers[q.id] || (Array.isArray(this.answers[q.id]) && this.answers[q.id].length === 0)) {
